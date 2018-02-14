@@ -4,6 +4,7 @@ import sys
 import os
 import pickle
 from pprint import pprint
+import numpy as np
 
 os.chdir('/Users/brentan/Documents/DAND/Projects/ML/ud120-projects/final_project')
 
@@ -36,14 +37,13 @@ features_list = ['poi',   #kept all features but email_address (text)
                  'deferred_income',
                  'total_stock_value',
                  'expenses',
-                 'from_poi_to_this_person',
+                 #'from_poi_to_this_person',
                  'exercised_stock_options',
                  'from_messages',
                  'other',
-                 'from_this_person_to_poi',
-                 'poi',
+                 #'from_this_person_to_poi',
                  'long_term_incentive',
-                 'shared_receipt_with_poi',
+                 #'shared_receipt_with_poi',
                  'restricted_stock',
                  'director_fees']
 
@@ -58,9 +58,15 @@ my_dataset = data_dict
 data = featureFormat(my_dataset, features_list, sort_keys = True)
 labels, features = targetFeatureSplit(data)
 
+# split data into train / test sets
 from sklearn.cross_validation import train_test_split
 X_train, X_test, y_train, y_test = \
     train_test_split(features, labels, test_size=0.3, random_state=42)
+
+# check balance of POIs across data
+print("Percent POI's in overall dataset: {}%".format(np.mean(labels)*100))
+print("Percent POI's in training set: {}%".format(np.mean(y_train)*100))
+print("Percent POI's in test set: {}%".format(round(np.mean(y_test)*100, 2)))
 
 ### Task 4: Try a variety of classifiers
 ### Please name your classifier clf for easy export below.
@@ -69,8 +75,56 @@ X_train, X_test, y_train, y_test = \
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import GaussianNB 
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier # ML models
+from sklearn.svm import SVC # model
+from sklearn.linear_model import LogisticRegression # model 
+from sklearn.model_selection import GridSearchCV # for selecting the best model params
+from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score, roc_auc_score, confusion_matrix # for evaluating model performance
+from sklearn.model_selection import train_test_split # for creating the test / train datasets
+
+# make wee scoring function
+def ScoreMe(y_tst, preds)
+    print("The accuracy is {}".format(accuracy_score(y_tst,preds)))
+    print("The recall is {}".format(recall_score(y_tst, preds)))
+    print("The precision is {}".format(precision_score(y_tst, preds)))
+
 clf = GaussianNB()
+
+clf_lr = LogisticRegression()
+clf_lr.fit(X_train, y_train)
+lr_preds = clf_lr.predict(X_test)
+print("The accuracy for logistic regression is {}".format(accuracy_score(y_test, lr_preds)))
+confusion_matrix(y_test, lr_preds)
+
+clf_svc = SVC()
+clf_svc.fit(X_train, y_train)
+svc_preds = clf_svc.predict(X_test)
+print("The accuracy for SVC is {}".format(accuracy_score(y_test, svc_preds)))
+confusion_matrix(y_test, svc_preds)
+
+clf_rf = RandomForestClassifier()
+clf_rf.fit(X_train, y_train)
+rf_preds = clf_rf.predict(X_test)
+print("The accuracy for random forest is {}".format(accuracy_score(y_test, rf_preds)))
+confusion_matrix(y_test, rf_preds)
+
+
+clf_gb = GradientBoostingClassifier()
+clf_gb.fit(X_train, y_train)
+gb_preds = clf_gb.predict(X_test)
+print("The accuracy for gb is {}".format(accuracy_score(y_test, gb_preds)))
+print("The recall for gb is {}".format(recall_score(y_test, gb_preds)))
+
+clf_gb.score(X_test, y_test)
+
+
+
+
+recall_score(y_test, gb_preds)
+precision_score(y_test, gb_preds)
+
+
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
@@ -81,6 +135,19 @@ clf = GaussianNB()
 
 # Example starting point. Try investigating other evaluation techniques!
 
+grid_params = {'learning_rate': [.01, .05, .1],
+              'max_depth': [1,3,5,7],
+              'max_features': [1,5,10]}
+
+gb = GradientBoostingClassifier()
+
+gb_GS = GridSearchCV(gb, grid_params)
+
+gb_GS.fit(X_train, y_train)
+
+gb_GS_preds = gb_GS.best_estimator_.predict(X_test)
+print("score:", gb_GS.score(X_test, y_test))
+confusion_matrix(y_test, gb_GS_preds)
 
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
