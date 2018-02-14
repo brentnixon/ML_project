@@ -38,6 +38,18 @@ from sklearn.tree import DecisionTreeClassifier
 clf = DecisionTreeClassifier()
 clf.fit(X_train, y_train)
 
-dt_preds = clf.predict(X_test)
+
 print("score: {}".format(clf.score(X_test, y_test)))
+
+from sklearn.metrics import confusion_matrix, precision_score, recall_score
+
+dt_preds = clf.predict(X_test)
+cMatrix = confusion_matrix(y_test, dt_preds)
+precision = precision_score(y_test, dt_preds)
+recall = recall_score(y_test, dt_preds)
+
+
+
+
+
 
