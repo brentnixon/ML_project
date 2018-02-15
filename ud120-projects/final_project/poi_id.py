@@ -75,7 +75,8 @@ print("Percent POI's in test set: {}%".format(round(np.mean(y_test)*100, 2)))
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
-from sklearn.naive_bayes import GaussianNB 
+from sklearn.naive_bayes import GaussianNB  # Gaussian Naive Bayes
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier # ML models
 from sklearn.svm import SVC # model
 from sklearn.linear_model import LogisticRegression # model 
@@ -84,48 +85,66 @@ from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_sc
 from sklearn.model_selection import train_test_split # for creating the test / train datasets
 
 # make wee scoring function
-def ScoreMe(y_tst, preds)
-    print("The accuracy is {}".format(accuracy_score(y_tst,preds)))
-    print("The recall is {}".format(recall_score(y_tst, preds)))
-    print("The precision is {}".format(precision_score(y_tst, preds)))
+def ScoreMe(model, y_test, preds):
+    print("{}: accuracy report".format(model))
+    print("The accuracy is {}".format(accuracy_score(y_test,preds)))
+    print("The recall is {}".format(recall_score(y_test, preds)))
+    print("The precision is {}".format(precision_score(y_test, preds)))
+    print(confusion_matrix(y_test, preds))
+    return
 
-clf = GaussianNB()
 
+### models, raw, no grid search / tuning, or feature estimation
+    
+## logistic regression
 clf_lr = LogisticRegression()
 clf_lr.fit(X_train, y_train)
 lr_preds = clf_lr.predict(X_test)
-print("The accuracy for logistic regression is {}".format(accuracy_score(y_test, lr_preds)))
-confusion_matrix(y_test, lr_preds)
+ScoreMe("logistic regression", y_test, lr_preds)
 
+## support vectors
 clf_svc = SVC()
 clf_svc.fit(X_train, y_train)
 svc_preds = clf_svc.predict(X_test)
-print("The accuracy for SVC is {}".format(accuracy_score(y_test, svc_preds)))
-confusion_matrix(y_test, svc_preds)
+ScoreMe("SVC", y_test, svc_preds)
 
+## random forest
 clf_rf = RandomForestClassifier()
 clf_rf.fit(X_train, y_train)
 rf_preds = clf_rf.predict(X_test)
-print("The accuracy for random forest is {}".format(accuracy_score(y_test, rf_preds)))
-confusion_matrix(y_test, rf_preds)
+ScoreMe("RF", y_test, rf_preds)
 
-
+## gradient boosting
 clf_gb = GradientBoostingClassifier()
 clf_gb.fit(X_train, y_train)
 gb_preds = clf_gb.predict(X_test)
-print("The accuracy for gb is {}".format(accuracy_score(y_test, gb_preds)))
-print("The recall for gb is {}".format(recall_score(y_test, gb_preds)))
+ScoreMe("gradient boost",y_test, gb_preds)
 
-clf_gb.score(X_test, y_test)
+## gaussian naive bayes
+clf_gNB = GaussianNB()
+clf_gNB.fit(X_train, y_train)
+gNB_preds = clf_gNB.predict(X_test)
+ScoreMe("GaussianNB", y_test, gNB_preds)
+
+## K Neighbors Classifier
+clf_knc = KNeighborsClassifier(n_neighbors = 2)
+clf_knc.fit(X_train, y_train)
+knc_preds = clf_knc.predict(X_test)
+ScoreMe("k neighbors", y_test, knc_preds)
+
+"""
+I picked six supervised classification algorithms to test. My idea is to test 
+the algorithms raw, without any dimensionality reduction, feature transformation 
+or algorithm tuning. This will help me get a baseline understanding of how the
+ models perform. After that, I will set up a grid of parameters for each 
+ algorithm and use grid search to find each one's best estimator parameters.  
+
+Based on that, I might try some dimensionality reduction, feature scaling, and
+feature selection. 
 
 
 
-
-recall_score(y_test, gb_preds)
-precision_score(y_test, gb_preds)
-
-
-
+"""
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
 ### folder for details on the evaluation method, especially the test_classifier
