@@ -3,18 +3,13 @@ __Brent Nixon, Feb. 2018__
 
 ## Introduction <a id='Introduction'></a>
 
->In this project, I will examine a section of the Open Street Map (OSM). To do this, I will extract the data from OSM, process the data programatically, look for issues in the data (such as cleanliness, uniformity, and validity), load the data into a local SQL database, and then explore the data using SQL to get an overview of the area.
+>The goal of this project was to build a model that, trained on financial and email data for the Enron employees, could then predict whether an unseen employee, by virtue of their data, was a person-of-interest (POI) in the fraud investigation. 
 
->I chose to examine OSM data from the southeast part of Charlotte, North Carolina, which is where I grew up. 
-
->Navigate to this link to examine the bounding box describing the area I worked with: http://www.openstreetmap.org/relation/177415#map=11/35.2033/-80.8401
-
->Charlotte is an interesting city because it has a wide variety of urbanism. There is a dense urban core with high-rises, semi-urban mixed residential and commercial areas, sub-urban residential areas, and low-density sprawl. For a mapping project, there would certainly be a variety of features and idiosyncrasies to sort out. 
+> Machine learning is useful to this end because it allows us to examine a large body of data points that hold patterns which we would not necessarily be able to identify through simple analysis. A machine learning model takes that body of disparate data, 'learns' patterns in it that correspond to a particular label, and determines how closely that new unit matches the patterns associated with each label, resulting in a prediction for membership in a class/label. 
 
 ### To get a closer look at this project, go to:
 * https://brentnixon.github.io/Wra/ 
 
 
 ### For more interaction, download the repository and open the notebook: 
-* Wrangle_OSM_BNixon_jn.ipynb
-
+* ML_project_CoreNotebook.ipynb
