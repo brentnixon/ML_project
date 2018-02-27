@@ -8,7 +8,7 @@ __Brent Nixon, Feb. 2018__
 > Machine learning is useful to this end because it allows us to examine a large body of data points that hold patterns which we would not necessarily be able to identify through simple analysis. A machine learning model takes that body of disparate data, 'learns' patterns in it that correspond to a particular label, and determines how closely that new unit matches the patterns associated with each label, resulting in a prediction for membership in a class/label. 
 
 ### To get a closer look at this project, go to:
-* https://brentnixon.github.io/Wra/ 
+* https://brentnixon.github.io/SupervisedFraud/ 
 
 
 ### For more interaction, download the repository and open the notebook: 
